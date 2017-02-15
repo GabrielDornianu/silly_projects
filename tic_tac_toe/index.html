@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>X and 0 game</title>
+<title>Tic tac toe game</title>
 <meta charset="utf-8"/>
 </head>
-<body style="background-color: black;">
-<canvas id="canvas" height="600" width="600" style="border: none;background-color: orange; float: left;" onmousemove="update_position(event);" onclick="set_mark();">
+<body style="background-color: black; margin: 0; padding: 0;">
+<canvas id="canvas" height="600" width="600" style="border: 2px solid red; background-color: orange; float: left; padding: 0;" onmousemove="update_position(event);" onclick="set_mark();">
 </canvas>
-<div id="game_data" style="float: right; background-color: white; border: 2px solid red; margin-right: 50px; padding: 5px 35px;">
+<div id="game_data" style="float: right; background-color: white; border: 2px solid red; padding: 5px 35px;">
 <h4>Game data</h4>
 <div>
 <h5>Your position</h5>
@@ -18,6 +18,7 @@
 <p id="your_square">Default: 1</p>
 </div>
 </div>
+<div style="clear: both;"></div>
 <script src="javascript.js"></script>
 </body>
 </html>

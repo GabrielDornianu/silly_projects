@@ -1,3 +1,5 @@
+"use strict";
+
 //The main variables of the game
 var canvas = document.getElementById("canvas"),
 	context = canvas.getContext("2d"),
@@ -6,7 +8,8 @@ var canvas = document.getElementById("canvas"),
 	game_data = document.getElementById("game_data"),
 	position = document.getElementById("position"),
 	your_square = document.getElementById("your_square"),
-	squares = [];
+	squares = [],
+	actual_square_data;
 
 //This function will build the square objects that will be used in the game
 function build_ticTacToe_squares(){
@@ -26,15 +29,15 @@ function build_square(number, value, coordX, coordY){
 	this.lower_square_coordX = this.square_coordX - 199;
 	this.lower_square_coordY = this.square_coordY - 199;
 	this.get_data = function(){
-	console.log("This square is located between: X* " + this.lower_square_coordX + " - " + this.square_coordX +
-	" ;Y* " + this.lower_square_coordY + " - " + this.square_coordY +
-	" ;Value* " + this.value +
-	" ;Number* " + this.square_number);
+	console.log("This square is located between X: " + this.lower_square_coordX + " - " + this.square_coordX
+	+ " Y: " + this.lower_square_coordY + " - " + this.square_coordY
+	+ " Has the value of: " + this.value
+	+ " and the Number: " + this.square_number);
 	}
 }
 
 //The for loop adds the 9 squares
-for(i=1; i<10; i++){
+for(let i=1; i<10; i++){
 	actual_square = new build_square(square_number, null, square_coordX, square_coordY);
 	squares.push(actual_square);
 	square_number += 1;
@@ -63,7 +66,7 @@ function drawGrid(startx, starty, endx, endy){
 	context.stroke();
 }
 
-for(c=0; c<600; c+=200){
+for(let c=0; c<600; c+=200){
 	drawGrid(c, 0, c, 600);
 	drawGrid(0, c, 600, c);
 }
@@ -72,9 +75,26 @@ for(c=0; c<600; c+=200){
 
 build_grid();
 
+//This function gets your position dinamically
 function update_position(e){
 	currentX = e.clientX;
 	currentY = e.clientY;
 	console.log("X: " + currentX.toString() + " Y: " + currentY.toString());
 	position.innerHTML = "Actual: " + currentX + "x , " + currentY + "y";
+
+//The function that dinamically gets the square you are on
+function highlight_actual_square(){
+	for(let square in squares){
+		if((currentY >= squares[square].lower_square_coordY && currentY <= squares[square].square_coordY) && (currentX >= squares[square].lower_square_coordX && currentX <= squares[square].square_coordX)){
+			your_square.innerHTML = squares[square].square_number;
+			console.log(squares[square].lower_square_coordX + " " + squares[square].lower_square_coordY);
+			actual_square_data = squares[square];
+		}
+	}
+}
+
+highlight_actual_square();
+
+console.log(actual_square_data);
+
 }
