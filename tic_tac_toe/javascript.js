@@ -9,10 +9,63 @@ var canvas = document.getElementById("canvas"),
 	position = document.getElementById("position"),
 	your_square = document.getElementById("your_square"),
 	squares = [],
-	actual_square_data;
+	actual_square_data,
+	player_starts = true,
+	this_move = "player",
+	actual_symbol = "X",
+	difficulty = "easy";
+
+function draw_X(obj, color){
+	context.beginPath();
+	context.moveTo(obj.lower_square_coordX + 50, obj.lower_square_coordY + 50);
+	context.lineTo(obj.lower_square_coordX + 150, obj.lower_square_coordY + 150);
+	context.lineTo(obj.lower_square_coordX + 100, obj.lower_square_coordY + 100);
+	context.closePath()
+	context.lineWidth = 3;
+	context.strokeStyle = color;
+	context.stroke();
+	context.beginPath();
+	context.moveTo(obj.lower_square_coordX + 50, obj.lower_square_coordY + 150);
+	context.lineTo(obj.lower_square_coordX + 150, obj.lower_square_coordY + 50);
+	context.closePath();
+	context.stroke();
+}
+
+function draw_0(obj, color){
+	context.beginPath();
+	context.arc(obj.lower_square_coordX + 100, obj.lower_square_coordY + 100, 50,0 ,2*Math.PI);
+	context.lineWidth = 3;
+	context.strokeStyle = color;
+	context.stroke();
+}
+
+function draw_symbol(square, symbol){
+	if(symbol == "X"){
+		draw_X(square, "yellow");
+	}else if(symbol == "0"){
+		draw_0(square, "blue");
+	}
+}
+
+//Each time the player or the computer makes a move , this function will get used
+function select_square(){
+	if(actual_square_data.value == null){
+		console.log("square number " + actual_square_data.square_number + " selected");
+		actual_square_data.value = actual_symbol;
+		draw_symbol(actual_square_data, actual_symbol);
+		if(actual_symbol == "X"){
+			actual_symbol = "0";
+		}else{
+			actual_symbol = "X";
+		}
+	}
+	check_table();
+}
+
+
 
 //This function will build the square objects that will be used in the game
-function build_ticTacToe_squares(){
+(function build_ticTacToe_squares(){
 
 //The variables incremented in the for loop
 var square_number = 1,
@@ -48,14 +101,12 @@ for(let i=1; i<10; i++){
 	}
 }
 
-console.log(squares);
+//console.log(squares);
 
-}
-
-build_ticTacToe_squares();
+})();
 
 //This function will draw the lines of the game
-function build_grid(){
+(function build_grid(){
 
 function drawGrid(startx, starty, endx, endy){
 	context.beginPath();
@@ -71,15 +122,13 @@ for(let c=0; c<600; c+=200){
 	drawGrid(0, c, 600, c);
 }
 
-}
-
-build_grid();
+})();
 
 //This function gets your position dinamically
 function update_position(e){
 	currentX = e.clientX;
 	currentY = e.clientY;
-	console.log("X: " + currentX.toString() + " Y: " + currentY.toString());
+	//console.log("X: " + currentX.toString() + " Y: " + currentY.toString());
 	position.innerHTML = "Actual: " + currentX + "x , " + currentY + "y";
 
 //The function that dinamically gets the square you are on
@@ -87,7 +136,7 @@ function highlight_actual_square(){
 	for(let square in squares){
 		if((currentY >= squares[square].lower_square_coordY && currentY <= squares[square].square_coordY) && (currentX >= squares[square].lower_square_coordX && currentX <= squares[square].square_coordX)){
 			your_square.innerHTML = squares[square].square_number;
-			console.log(squares[square].lower_square_coordX + " " + squares[square].lower_square_coordY);
+			//console.log(squares[square].lower_square_coordX + " " + squares[square].lower_square_coordY);
 			actual_square_data = squares[square];
 		}
 	}
@@ -95,6 +144,8 @@ function highlight_actual_square(){
 
 highlight_actual_square();
 
-console.log(actual_square_data);
+}
+
+function AI_move(){
 
 }
