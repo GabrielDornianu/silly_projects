@@ -15,6 +15,32 @@ var canvas = document.getElementById("canvas"),
 	actual_symbol = "X",
 	difficulty = "easy";
 
+function scan_table(symbol){
+	var winner;
+	if(symbol != "X"){
+		winner = "player1";
+	}else if(symbol != "0"){
+		winner = "player2";
+	}
+	if(squares[0].value == symbol && squares[1].value == symbol && squares[2].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[3].value == symbol && squares[4].value == symbol && squares[5].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[6].value == symbol && squares[7].value == symbol && squares[8].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[0].value == symbol && squares[3].value == symbol && squares[6].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[1].value == symbol && squares[4].value == symbol && squares[7].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[2].value == symbol && squares[5].value == symbol && squares[8].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[0].value == symbol && squares[4].value == symbol && squares[8].value == symbol){
+		alert("The " + winner + " has won!");
+	}else if(squares[2].value == symbol && squares[4].value == symbol && squares[6].value == symbol){
+		alert("The " + winner + " has won!");
+	}
+}
+
 function draw_X(obj, color){
 	context.beginPath();
 	context.moveTo(obj.lower_square_coordX + 50, obj.lower_square_coordY + 50);
@@ -53,13 +79,16 @@ function select_square(){
 		console.log("square number " + actual_square_data.square_number + " selected");
 		actual_square_data.value = actual_symbol;
 		draw_symbol(actual_square_data, actual_symbol);
+		console.log(squares[actual_square_data.square_number-1].value);
 		if(actual_symbol == "X"){
+			squares[actual_square_data.square_number-1].value = "0";
 			actual_symbol = "0";
 		}else{
+			squares[actual_square_data.square_number-1].value = "X";
 			actual_symbol = "X";
 		}
 	}
-	check_table();
+	scan_table(actual_symbol);
 }
 
 
