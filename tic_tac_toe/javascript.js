@@ -12,40 +12,8 @@ var canvas = document.getElementById("canvas"),
 	actual_square_data,
 	this_move = "player",
 	actual_symbol = "X",
-	difficulty = "easy",
-	frees_quares = [],
-	game_difficulty = 1;
-
-function set_difficulty(difficulty){
-	game_difficulty = difficulty;
-}
-
-function scan_table(){
-	var winner;
-	if(actual_symbol == "X"){
-		winner = "player";
-	}else if(actual_symbol == "0"){
-		winner = "computer";
-	}
-	if(squares[0].value == actual_symbol && squares[1].value == actual_symbol && squares[2].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[3].value == actual_symbol && squares[4].value == actual_symbol && squares[5].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[6].value == actual_symbol && squares[7].value == actual_symbol && squares[8].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[0].value == actual_symbol && squares[3].value == actual_symbol && squares[6].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[1].value == actual_symbol && squares[4].value == actual_symbol && squares[7].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[2].value == actual_symbol && squares[5].value == actual_symbol && squares[8].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[0].value == actual_symbol && squares[4].value == actual_symbol && squares[8].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}else if(squares[2].value == actual_symbol && squares[4].value == actual_symbol && squares[6].value == actual_symbol){
-		alert("The " + winner + " has won!");
-	}
-
-}
+	game_difficulty = 1,
+	winner_exists = false;
 
 function draw_X(obj, color){
 	context.beginPath();
@@ -71,6 +39,44 @@ function draw_0(obj, color){
 	context.stroke();
 }
 
+function test_winner(actual_symbol){
+	if(!winner_exists){
+	if(squares[0].square_value == actual_symbol && squares[1].square_value == actual_symbol && squares[2].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[3].square_value == actual_symbol && squares[4].square_value == actual_symbol && squares[5].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[6].square_value == actual_symbol && squares[7].square_value == actual_symbol && squares[8].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[0].square_value == actual_symbol && squares[3].square_value == actual_symbol && squares[6].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[1].square_value == actual_symbol && squares[4].square_value == actual_symbol && squares[7].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[2].square_value == actual_symbol && squares[5].square_value == actual_symbol && squares[8].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[0].square_value == actual_symbol && squares[4].square_value == actual_symbol && squares[8].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}else if(squares[2].square_value == actual_symbol && squares[4].square_value == actual_symbol && squares[6].square_value == actual_symbol){
+		alert("The " + actual_symbol + " has won!");
+		winner_exists = true;
+	}
+	}
+}
+
+function scan_table(){
+	if(actual_symbol == "X"){
+		test_winner(actual_symbol);
+	}else if(actual_symbol == "0"){
+		test_winner(actual_symbol);
+	}
+}
+
 function draw_symbol(square, symbol){
 	if(symbol == "X"){
 		draw_X(square, "yellow");
@@ -81,17 +87,21 @@ function draw_symbol(square, symbol){
 
 //Each time the player or the computer makes a move , this function will get used
 function select_square(){
-	if(actual_square_data.value == null){
-		if(actual_symbol == "X"){
+	if(actual_square_data.square_value == null){
+
+		//your move
 			draw_symbol(actual_square_data, actual_symbol);
-			actual_square_data.value = actual_symbol;
-			squares[actual_square_data.square_number-1].value = "0";
-			actual_symbol = "0";
-			//scan_table();
+			actual_square_data.square_value = actual_symbol;
+			squares[actual_square_data.square_number-1].square_value = actual_symbol;
+			scan_table();
+
+		//computer's move
 			if(game_difficulty == 1){
-				easy_AI_move();
-			}
-			console.log(actual_square_data.value);
+			easy_AI_move();
+		}else if(game_difficulty == 2){
+			medium_AI_move();
+		}else if(game_difficulty == 3){
+			hard_AI_move();
 		}
 	}
 }
@@ -108,9 +118,9 @@ var square_number = 1,
 	actual_square;
 
 //The constructor function for each square
-function build_square(number, value, coordX, coordY){
+function build_square(number, square_value, coordX, coordY){
 	this.square_number = number;
-	this.value = value;
+	this.square_value = square_value;
 	this.square_coordX = coordX;
 	this.square_coordY = coordY;
 	this.lower_square_coordX = this.square_coordX - 199;
@@ -118,7 +128,7 @@ function build_square(number, value, coordX, coordY){
 	this.get_data = function(){
 	console.log("This square is located between X: " + this.lower_square_coordX + " - " + this.square_coordX
 	+ " Y: " + this.lower_square_coordY + " - " + this.square_coordY
-	+ " Has the value of: " + this.value
+	+ " Has the square_value of: " + this.square_value
 	+ " and the Number: " + this.square_number);
 	}
 }
@@ -160,7 +170,6 @@ for(let c=0; c<600; c+=200){
 function update_position(e){
 	currentX = e.clientX;
 	currentY = e.clientY;
-	//console.log("X: " + currentX.toString() + " Y: " + currentY.toString());
 	position.innerHTML = "Actual: " + currentX + "x , " + currentY + "y";
 
 //The function that dinamically gets the square you are on
@@ -177,23 +186,48 @@ highlight_actual_square();
 
 }
 
-function easy_AI_move(){
-	frees_quares = squares.filter(function(square){
-		if(square.value==null){
-			return true;
+function test_and_draw(symbol){
+		let null_squares = [];
+		console.log("LOOP STARTS");
+		for(let i=0; i<squares.length; i++){
+			if(squares[i].square_value == null){
+				null_squares.push(squares[i]);
+				console.log(squares[i].square_number);
+			}
 		}
-	});
-	let random_number = Math.floor(Math.random()*frees_quares.length);
-	draw_symbol(frees_quares[random_number], "0");
-	squares[frees_quares[random_number].square_number-1].value = "0";
+		console.log("LOOP ENDS");
+
+		let random_square = null_squares[Math.floor(Math.random() * null_squares.length)];
+		draw_symbol(random_square, symbol);
+		squares[random_square.square_number - 1].square_value = symbol;
+		test_winner(actual_symbol);
+}
+
+function easy_AI_move(){
+	console.log("Difficulty set to easy");
+	actual_symbol = "0";
+	test_and_draw(actual_symbol);
 	actual_symbol = "X";
 	scan_table();
 }
 
 function medium_AI_move(){
-
+	console.log("Difficulty set to medium");
+	actual_symbol = "0";
+	analyse_paths();
+	try_to_stop();
+	test_and_draw(actual_symbol);
+	actual_symbol = "X";
+	scan_table();
 }
 
 function hard_AI_move(){
-
+	console.log("Difficulty set to hard");
+	actual_symbol = "0";
+	analyse_paths();
+	try_to_stop();
+	try_to_win();
+	test_and_draw(actual_symbol);
+	actual_symbol = "X";
+	scan_table();
 }
