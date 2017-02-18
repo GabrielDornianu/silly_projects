@@ -10,10 +10,23 @@ var canvas = document.getElementById("canvas"),
 	your_square = document.getElementById("your_square"),
 	squares = [],
 	actual_square_data,
-	this_move = "player",
 	actual_symbol = "X",
 	game_difficulty = 1,
 	winner_exists = false;
+
+function restart_table(){
+	context.clearRect(0, 0, 600, 600);
+	squares = [];
+	actual_square_data = {};
+	winner_exists = false;
+	build_grid();
+	build_ticTacToe_squares();
+}
+
+function set_difficulty(num){
+	restart_table();
+	game_difficulty = num;
+}
 
 function draw_X(obj, color){
 	context.beginPath();
@@ -109,7 +122,7 @@ function select_square(){
 
 
 //This function will build the square objects that will be used in the game
-(function build_ticTacToe_squares(){
+function build_ticTacToe_squares(){
 
 //The variables incremented in the for loop
 var square_number = 1,
@@ -145,10 +158,12 @@ for(let i=1; i<10; i++){
 	}
 }
 
-})();
+}
+
+build_ticTacToe_squares();
 
 //This function will draw the lines of the game
-(function build_grid(){
+function build_grid(){
 
 function drawGrid(startx, starty, endx, endy){
 	context.beginPath();
@@ -164,7 +179,9 @@ for(let c=0; c<600; c+=200){
 	drawGrid(0, c, 600, c);
 }
 
-})();
+}
+
+build_grid();
 
 //This function gets your position dinamically
 function update_position(e){
@@ -201,6 +218,26 @@ function test_and_draw(symbol){
 		draw_symbol(random_square, symbol);
 		squares[random_square.square_number - 1].square_value = symbol;
 		test_winner(actual_symbol);
+}
+
+function analyse_paths(){
+
+}
+
+function analyse_paths(){
+	let paths = {};
+	for(let i=0; i<squares.length+1; i++){
+		if(squares[i].square_value == actual_symbol && )
+	}
+	return paths;
+}
+
+function try_to_stop(){
+
+}
+
+function try_to_win(){
+
 }
 
 function easy_AI_move(){
