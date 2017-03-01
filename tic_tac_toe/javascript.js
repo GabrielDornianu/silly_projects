@@ -221,23 +221,11 @@ function test_and_draw(symbol){
 }
 
 function analyse_paths(){
-
-}
-
-function analyse_paths(){
 	let paths = {};
 	for(let i=0; i<squares.length+1; i++){
 		if(squares[i].square_value == actual_symbol && )
 	}
 	return paths;
-}
-
-function try_to_stop(){
-
-}
-
-function try_to_win(){
-
 }
 
 function easy_AI_move(){
